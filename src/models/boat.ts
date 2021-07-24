@@ -16,11 +16,12 @@ interface BoatAttrs {
   boatCapicity: number;
   boatDescription: string;
   photos: string[];
+  userId: string;
 }
 
 // An interface that describes the properties that a user model has.
 interface BoatModel extends mongoose.Model<BoatDoc> {
-  build(attrs: BoatAttrs): BoatAttrs;
+  build(attrs: BoatAttrs): BoatDoc;
 }
 
 // An interface that describes the properties that a user document has
@@ -38,6 +39,9 @@ interface BoatDoc extends mongoose.Document {
   boatCapicity: number;
   boatDescription: string;
   photos: string[];
+  userId: string;
+  orderId: string;
+  version: number;
 }
 
 const boatSchema = new mongoose.Schema(
@@ -55,44 +59,51 @@ const boatSchema = new mongoose.Schema(
       required: true,
     },
     city: {
-      types: String,
+      type: String,
       required: true,
     },
     boatHarbour: {
-      types: String,
+      type: String,
       required: true,
     },
     captain: {
-      types: Boolean,
+      type: Boolean,
       required: true,
     },
     price: {
-      types: Number,
+      type: Number,
       required: true,
     },
     cabins: {
-      types: Number,
+      type: Number,
       required: true,
     },
     bathrooms: {
-      types: Number,
+      type: Number,
       required: true,
     },
     lengthOfBoat: {
-      types: Number,
+      type: Number,
       required: true,
     },
     boatCapicity: {
-      types: Number,
+      type: Number,
       required: true,
     },
     boatDescription: {
-      types: String,
+      type: String,
       required: true,
     },
     photos: {
-      types: Array,
+      type: Array,
       required: true,
+    },
+    userId: {
+      type: String,
+      required: true,
+    },
+    orderId: {
+      type: String,
     },
   },
   {
@@ -102,6 +113,7 @@ const boatSchema = new mongoose.Schema(
         delete ret._id;
       },
     },
+    timestamps: true,
   }
 );
 
