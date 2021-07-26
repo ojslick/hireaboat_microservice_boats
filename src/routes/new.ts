@@ -25,13 +25,26 @@ router.post(
       .notEmpty()
       .withMessage('You must input boat harbour'),
     body('captain').notEmpty().withMessage('You must input captain'),
-    body('price').trim().notEmpty().withMessage('You must input price'),
-    body('cabins').notEmpty().withMessage('You must input cabins'),
-    body('bathrooms').notEmpty().withMessage('You must input bathrooms'),
-    body('lengthOfBoat')
+    body('price')
+      .isFloat({ gt: 0 })
       .notEmpty()
-      .withMessage('You must input length of boat'),
-    body('boatCapicity').notEmpty().withMessage('You must input boat capacity'),
+      .withMessage('Price must be greater than zero'),
+    body('cabins')
+      .isFloat({ gt: 0 })
+      .notEmpty()
+      .withMessage('Cabins must be greater than zero'),
+    body('bathrooms')
+      .isFloat({ gt: 0 })
+      .notEmpty()
+      .withMessage('Bathrooms must be greater than zero'),
+    body('lengthOfBoat')
+      .isFloat({ gt: 0 })
+      .notEmpty()
+      .withMessage('Length of boat be greater than zero'),
+    body('boatCapicity')
+      .isFloat({ gt: 0 })
+      .notEmpty()
+      .withMessage('Boat capacity must be greater than zero'),
     body('boatDescription')
       .trim()
       .notEmpty()
