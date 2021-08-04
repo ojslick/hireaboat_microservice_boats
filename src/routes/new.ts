@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 import { Boat } from '../models/boat';
 import { validateRequest, requireAuth } from '@hireaboat/common';
 import { BoatCreatedPublisher } from '../events/publishers/boat-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -88,7 +89,7 @@ router.post(
 
     await boat.save();
 
-    new BoatCreatedPublisher(client).publish({
+    new BoatCreatedPublisher(natsWrapper.client).publish({
       id: boat.id,
       boatType: boat.boatType,
       boatManufacturer: boat.boatManufacturer,

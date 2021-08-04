@@ -1,5 +1,6 @@
 import { app } from './app';
 import mongoose from 'mongoose';
+import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -7,6 +8,7 @@ const start = async () => {
   }
 
   try {
+    await natsWrapper.connect('hireaboat', 'jkdhjs', 'http://nats-srv:4222');
     await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
