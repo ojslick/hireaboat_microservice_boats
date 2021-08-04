@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-
 import { Boat } from '../models/boat';
 import { validateRequest, requireAuth } from '@hireaboat/common';
+import { BoatCreatedPublisher } from '../events/publishers/boat-created-publisher';
 
 const router = express.Router();
 
@@ -87,6 +87,24 @@ router.post(
     });
 
     await boat.save();
+
+    new BoatCreatedPublisher(client).publish({
+      id: boat.id,
+      boatType: boat.boatType,
+      boatManufacturer: boat.boatManufacturer,
+      boatModel: boat.boatModel,
+      city: boat.city,
+      boatHarbour: boat.boatHarbour,
+      captain: boat.captain,
+      price: boat.price,
+      cabins: boat.cabins,
+      bathrooms: boat.bathrooms,
+      lengthOfBoat: boat.lengthOfBoat,
+      boatCapicity: boat.boatCapicity,
+      boatDescription: boat.boatDescription,
+      userId: boat.userId,
+      photos: boat.photos,
+    });
 
     res.status(201).send(boat);
   }
