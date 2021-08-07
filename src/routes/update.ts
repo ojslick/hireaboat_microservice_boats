@@ -8,6 +8,8 @@ import {
 import { body } from 'express-validator';
 import express, { Request, Response } from 'express';
 import { Boat } from '../models/boat';
+import { BoatUpdatedPublisher } from '../events/publishers/boat-updated-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -107,21 +109,25 @@ router.put(
 
     await boat.save();
 
-    res.send({
-      boatType,
-      boatManufacturer,
-      boatModel,
-      city,
-      boatHarbour,
-      captain,
-      price,
-      cabins,
-      bathrooms,
-      lengthOfBoat,
-      boatCapicity,
-      boatDescription,
-      photos,
+    new BoatUpdatedPublisher(natsWrapper.client).publish({
+      id: boat.id,
+      boatType: boat.boatType,
+      boatManufacturer: boat.boatManufacturer,
+      boatModel: boat.boatModel,
+      city: boat.city,
+      boatHarbour: boat.boatHarbour,
+      captain: boat.captain,
+      price: boat.price,
+      cabins: boat.cabins,
+      bathrooms: boat.bathrooms,
+      lengthOfBoat: boat.lengthOfBoat,
+      boatCapicity: boat.boatCapicity,
+      boatDescription: boat.boatDescription,
+      photos: boat.photos,
+      userId: boat.userId,
     });
+
+    res.send(boat);
   }
 );
 
