@@ -11,44 +11,53 @@ router.post(
   '/api/boats',
   requireAuth,
   [
-    body('boatType').notEmpty().withMessage('You must input boat type'),
+    body('boatType').not().isEmpty().withMessage('You must input boat type'),
     body('boatManufacturer')
       .trim()
-      .notEmpty()
+      .not()
+      .isEmpty()
       .withMessage('You must input boat manufacturer'),
     body('boatModel')
       .trim()
-      .notEmpty()
+      .not()
+      .isEmpty()
       .withMessage('You must input boat model'),
     body('city').trim().notEmpty().withMessage('You must input city'),
     body('boatHarbour')
       .trim()
-      .notEmpty()
+      .not()
+      .isEmpty()
       .withMessage('You must input boat harbour'),
-    body('captain').notEmpty().withMessage('You must input captain'),
+    body('captain').isBoolean().withMessage('You must input captain'),
     body('price')
       .isFloat({ gt: 0 })
-      .notEmpty()
+      .not()
+      .isEmpty()
       .withMessage('Price must be greater than zero'),
     body('cabins')
       .isFloat({ gt: 0 })
-      .notEmpty()
+      .not()
+      .isEmpty()
       .withMessage('Cabins must be greater than zero'),
     body('bathrooms')
       .isFloat({ gt: 0 })
-      .notEmpty()
+      .not()
+      .isEmpty()
       .withMessage('Bathrooms must be greater than zero'),
     body('lengthOfBoat')
       .isFloat({ gt: 0 })
-      .notEmpty()
+      .not()
+      .isEmpty()
       .withMessage('Length of boat be greater than zero'),
     body('boatCapicity')
       .isFloat({ gt: 0 })
-      .notEmpty()
+      .not()
+      .isEmpty()
       .withMessage('Boat capacity must be greater than zero'),
     body('boatDescription')
       .trim()
-      .notEmpty()
+      .not()
+      .isEmpty()
       .withMessage('You must input boat description'),
     body('photos').notEmpty().withMessage('You must upload a boat photo'),
   ],
@@ -87,7 +96,11 @@ router.post(
       userId: req.currentUser!.id,
     });
 
-    await boat.save();
+    try {
+      await boat.save();
+    } catch (err) {
+      console.log('err-->', err);
+    }
 
     new BoatCreatedPublisher(natsWrapper.client).publish({
       id: boat.id,

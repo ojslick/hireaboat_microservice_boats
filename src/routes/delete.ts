@@ -5,8 +5,10 @@ import {
   requireAuth,
 } from '@hireaboat/common';
 import express, { Request, Response } from 'express';
+import { BoatDeletedPublisher } from '../events/publishers/boat-deleted-publisher';
 
 import { Boat } from '../models/boat';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -33,6 +35,9 @@ router.delete(
     }
 
     boat.deleteOne();
+    new BoatDeletedPublisher(natsWrapper.client).publish({
+      id,
+    });
 
     res.send({ status: 'successful' });
   }
