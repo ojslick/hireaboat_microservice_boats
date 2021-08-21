@@ -4,6 +4,7 @@ import { Boat } from '../models/boat';
 import { validateRequest, requireAuth } from '@hireaboat/common';
 import { BoatCreatedPublisher } from '../events/publishers/boat-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
+import { version } from 'node-nats-streaming';
 
 const router = express.Router();
 
@@ -104,6 +105,7 @@ router.post(
 
     new BoatCreatedPublisher(natsWrapper.client).publish({
       id: boat.id,
+      version: boat.version,
       boatType: boat.boatType,
       boatManufacturer: boat.boatManufacturer,
       boatModel: boat.boatModel,

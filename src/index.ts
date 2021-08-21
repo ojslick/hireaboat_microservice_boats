@@ -1,6 +1,7 @@
 import { app } from './app';
 import mongoose from 'mongoose';
 import { natsWrapper } from './nats-wrapper';
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -17,7 +18,9 @@ const start = async () => {
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
 
-    await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
+    new OrderCreatedListener(natsWrapper.client).listen();
+
+    await mongoose.connect('mongodb://boats-mongo-srv:27017/boats', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,

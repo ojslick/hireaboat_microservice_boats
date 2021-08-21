@@ -111,6 +111,7 @@ router.put(
 
     new BoatUpdatedPublisher(natsWrapper.client).publish({
       id: boat.id,
+      version: boat.version,
       boatType: boat.boatType,
       boatManufacturer: boat.boatManufacturer,
       boatModel: boat.boatModel,

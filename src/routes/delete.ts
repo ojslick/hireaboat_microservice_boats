@@ -34,9 +34,9 @@ router.delete(
       throw new NotAuthorizedError();
     }
 
-    boat.deleteOne();
+    await boat.deleteOne();
     new BoatDeletedPublisher(natsWrapper.client).publish({
-      id,
+      id: boat.id,
     });
 
     res.send({ status: 'successful' });

@@ -592,7 +592,7 @@ it('creates a ticket with valid inputs', async () => {
     // @ts-ignore
     .set('Cookie', global.signin())
     .send({
-      boatType: 'Boat',
+      boatType: 'jhjhsd',
       boatManufacturer: 'Passat',
       boatModel: 'ML350',
       city: 'Lagos',
@@ -607,6 +607,8 @@ it('creates a ticket with valid inputs', async () => {
       photos: ['skhdhfgywefuh'],
     })
     .expect(201);
+
+  console.log('response-->', response);
 
   boats = await Boat.find({});
 
